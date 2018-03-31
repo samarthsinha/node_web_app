@@ -1,0 +1,148 @@
+<%- contentFor('hero') %>
+<main xmlns="http://www.w3.org/1999/html">
+    <article class="container">
+        <form method="POST" action="/api/v1/get-user-info">
+            <input id="name" name="name" type="text"/>
+            <input type="submit"/>
+        </form>
+        <section class="top-section-indent ">
+            <section>
+                <span class="welcome-text">Welcome to</span>
+                <h2 class="custom-h2-head">
+                    SCHOOL&nbsp;CONNECT.
+                </h2>
+            </section>
+            <section>
+                <div style="background-color: white">
+                    <div>
+                        Home Page
+                        <% for(var i = 0;i < files.length;i++){ %>
+                        <br><%= files[i].firstName %> , <%= files[i].schools[0].schoolName %>
+                        <% } %>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </article>
+    <article style="border: 1px solid red">
+        Nas;dlas;dlsa;da;dla, ;
+        ada kl;ad a
+        da kl;da
+
+    </article>
+
+
+</main>
+<script>
+    (function(){
+        document.addEventListener('DOMContentLoaded',function(){
+            var form = document.querySelector('form');
+            form.addEventListener('submit',function(e){
+                e.preventDefault();
+                var login = document.getElementById("name").value;
+                if(login==='') {
+                    alert('Les champs doivent êtres remplis');
+                } else {
+                    var form = document.querySelector('form');
+                    var data = new FormData(form);
+                    var action = form.getAttribute("action");
+                    var method = form.getAttribute("method");
+                    makeAjaxRequest(action,method,data,handler);
+                }
+            });
+
+        });
+    })();
+
+
+
+    function handler(httpRequest) {
+        // response has been received so handle it now
+        if (httpRequest.readyState === 4) {
+            //In case status is 200 is what you are looking for implementation
+            // of this will change accordingly
+            if (httpRequest.status >= 200 && httpRequest.status < 400) {
+                alert('Utilisateur ajouté avec succès'); // J'affiche cette réponse
+//                window.location.href = "http://localhost:8080/games_v3/";
+                var resp = httpRequest.responseText;
+                console.log(httpRequest.responseText);
+            }
+        }
+    }
+
+
+
+//    makeAjaxRequest("/api/v1/get-user-info", "POST", null, handler);
+
+    /**
+     *
+     * @param url
+     * @param method
+     * @param data
+     * @param callback (Callback function to handle response state)
+     * @returns {boolean}
+     */
+    function makeAjaxRequest(url, method, data, callback) {
+        var httpRequest;
+        if (window.XMLHttpRequest) { // Mozilla, Safari, ...
+            httpRequest = new XMLHttpRequest();
+        } else if (window.ActiveXObject) { // IE
+            try {
+                httpRequest = new ActiveXObject("Msxml2.XMLHTTP");
+            }
+            catch (e) {
+                try {
+                    httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                catch (e) {
+                }
+            }
+        }
+
+        if (!httpRequest) {
+            console.log('Giving up :( Cannot create an XMLHTTP instance');
+            return false;
+        }
+        httpRequest.onreadystatechange = (function () {
+            return callback(httpRequest);
+        });
+        if (method && method.toUpperCase() == 'POST') {
+            httpRequest.open(method, url, true);
+            httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            httpRequest.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+            httpRequest.send(data);
+        } else {
+            httpRequest.open(method, url);
+            httpRequest.send();
+        }
+    }
+
+    function makeRequest(url, handlerFunction) {
+        var httpRequest;
+        if (window.XMLHttpRequest) { // Mozilla, Safari, ...
+            httpRequest = new XMLHttpRequest();
+        } else if (window.ActiveXObject) { // IE
+            try {
+                httpRequest = new ActiveXObject("Msxml2.XMLHTTP");
+            }
+            catch (e) {
+                try {
+                    httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                catch (e) {
+                }
+            }
+        }
+
+        if (!httpRequest) {
+            //alert('Giving up :( Cannot create an XMLHTTP instance');
+            return false;
+        }
+        httpRequest.onreadystatechange = function () {
+            return handlerFunction(httpRequest);
+        }
+        httpRequest.open('GET', url);
+        httpRequest.send();
+    }
+
+</script>
