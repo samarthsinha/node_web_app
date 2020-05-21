@@ -13,7 +13,7 @@
 <body>
  <header>
      <nav class="navbar navbar-inverse">
-         <a href="/" class="navbar-brand">SchoolConnect.</a>
+         <a href="/" class="navbar-brand">GamerHub.</a>
          <ul class="nav navbar-nav">
              <li><a href="/">HOME</a></li>
              <li><a href="/about">About</a></li>
@@ -23,37 +23,40 @@
  </header>
 <section class="hero">
     <div class="hero-content">
-
-        <p></p>
+         <%- defineContent('hero') %>
     </div>
 </section>
-
- <div id="player"></div>
- <a id="play-video" href="#">Play Video</a>
-<!--<main>
-    <div class="container">
-        <div class="jumbotron text-center">
-            Home Page
-        </div>
-    </div>
-</main>-->
- <%- defineContent('hero') %>
+<section class="container">
+<div id="player"></div>
+<div>
+    <a id="play-video" href="#">Play Video</a>
+    <a id="pause-video" href="#">Pause Video</a>
+</div>
+</section>
 
 <footer>
-    <span>SchoolKonnect. Copyright &copy 2017</span>
+    <span>GamerHub. Copyright &copy 2020</span>
 </footer>
 <script>
     $(document).ready(function() {
 
         $('#play-video').on('click', function(ev) {
-            console.log($("#player")[0].src);
-//            $("#player")[0].src += "&autoplay=1";
             if(player){
                 player.playVideo();
+                $(this).css('display','none');
+                $('#pause-video').css('display','inline-block');
             }
             ev.preventDefault();
-
         });
+
+        $('#pause-video').on('click', function(ev) {
+                    if(player){
+                        player.pauseVideo();
+                        $(this).css('display','none');
+                        $('#play-video').css('display','inline-block');
+                    }
+                    ev.preventDefault();
+                });
 
     });
 
@@ -61,9 +64,9 @@
     var player;
     function onYouTubePlayerAPIReady() {
         player = new YT.Player('player', {
-            height: '390',
+            height: '400',
             width: '640',
-            videoId: '0Bmhjf0rKe8',
+            videoId: 'tZRKYjxW2-g',
             events: {
                 onReady: onPlayerReady,
                 onStateChange: onPlayerStateChange
@@ -79,9 +82,8 @@
 
     // when video ends
     function onPlayerStateChange(event) {
-        console.log("lsklds",event);
         if(event.data === 0) {
-            alert('done');
+            console.log('done');
         }
     }
 

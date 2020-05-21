@@ -1,4 +1,7 @@
 'use strict';
+process.on('uncaughtException', function (err) {
+    console.log('Caught exception: ', err);
+});
 var express = require('express');
 var expressLayouts = require('express-ejs-layouts');
 
@@ -6,7 +9,7 @@ var path = require('path');
 const app = express();
 var bodyParser = require('body-parser');
 
-var port = 3000;
+var port = process.env.PORT || 3000;
 var User = require('./models/userModel');
 
 //Template support added
@@ -15,8 +18,10 @@ app.set('view engine','ejs');
 app.use(expressLayouts);
 //Serves static files like css & imgs from below static mapping
 app.use(express.static(__dirname+'/public'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
+app.use(express.json());
+app.use(express.urlencoded({
+    extended: true
+}));
 // Configures handlers here
 require('./routes/routes')(app);
 app.listen(port,function(){

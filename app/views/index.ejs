@@ -9,10 +9,10 @@
             <section>
                 <span class="welcome-text">Welcome to</span>
                 <h2 class="custom-h2-head">
-                    SCHOOL&nbsp;CONNECT.
+                    GAMER HUB
                 </h2>
             </section>
-            <section>
+           <!-- <section>
                 <div style="background-color: white">
                     <div>
                         Home Page
@@ -21,16 +21,9 @@
                         <% } %>
                     </div>
                 </div>
-            </section>
+            </section>-->
         </section>
     </article>
-    <article style="border: 1px solid red">
-        Nas;dlas;dlsa;da;dla, ;
-        ada kl;ad a
-        da kl;da
-
-    </article>
-
 
 </main>
 <script>
@@ -41,7 +34,7 @@
                 e.preventDefault();
                 var login = document.getElementById("name").value;
                 if(login==='') {
-                    alert('Les champs doivent êtres remplis');
+                    console.log('Dooo');
                 } else {
                     var form = document.querySelector('form');
                     var data = new FormData(form);
@@ -62,8 +55,6 @@
             //In case status is 200 is what you are looking for implementation
             // of this will change accordingly
             if (httpRequest.status >= 200 && httpRequest.status < 400) {
-                alert('Utilisateur ajouté avec succès'); // J'affiche cette réponse
-//                window.location.href = "http://localhost:8080/games_v3/";
                 var resp = httpRequest.responseText;
                 console.log(httpRequest.responseText);
             }

@@ -10,8 +10,6 @@ const path = require('path');
 
 var logger = new Logger(Logger.ERROR);
 function homePageHandler(req,res) {
-    logger.info("skklds");
-    logger.error("sdas");
     res.render('index', {files: userService.getUserList()},function (err,page) {
         if(err){
             logger.error("Error in rendering home page",err);

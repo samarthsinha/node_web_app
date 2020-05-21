@@ -41,7 +41,6 @@ body{
         margin: 5px;
         min-height: 100px;
         max-height: 500px;
-        border: 1px solid red;
         overflow-wrap: break-word;
         word-break: keep-all;
         overflow: scroll;
@@ -56,4 +55,17 @@ footer{
     bottom:0px;
     position: fixed;
     text-align: center;
+}
+
+#play-video{
+    padding:4px;
+    text-decoration: none;
+    background-color: azure;
+}
+
+#pause-video{
+    display: none;
+    padding:4px;
+    text-decoration: none;
+    background-color: azure;
 }
