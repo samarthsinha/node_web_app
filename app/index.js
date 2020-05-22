@@ -12,6 +12,22 @@ var bodyParser = require('body-parser');
 var port = process.env.PORT || 3000;
 var User = require('./models/userModel');
 
+var MongoClient = require('mongodb').MongoClient;
+var uri = process.env.MONGO_ATLAS_URI || 'mongodb://localhost:27017';
+if(uri){
+    MongoClient.connect(uri, { useNewUrlParser: true ,useUnifiedTopology: true },function(err,db) {
+        if (err) throw err;
+        db.db().collection('tes').find().toArray(function (err,value) {
+            console.log(value);
+            db.close();
+        });});
+//     var client = new MongoClient(uri, { useNewUrlParser: true ,useUnifiedTopology: true });
+//     client.connect();
+// // perform actions on the collection object
+//     });
+}
+
+
 //Template support added
 app.set('views',path.join(__dirname,'/views'));
 app.set('view engine','ejs');
