@@ -9,7 +9,7 @@ let app = null;
 exports.uploadFile = async (fileName,generatedFileName) => {
     if(!app){
         app = admin.initializeApp({
-            credential: admin.credential.cert(serviceAccount),
+            credential: admin.credential.cert(JSON.parse(serviceAccount)),
             databaseURL: googleStorageDb,
             storageBucket:bucketName
         });
