@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!--<link rel="stylesheet" href="/css/styles.css"/>-->
+    <link
+            rel="stylesheet"
+            href="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.min.css"
+    />
+    <link rel="stylesheet" href="//uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/github.min.css" />
+</head>
+<body>
+    <div id="editor">
+    </div>
+
+    <div id="viewer"></div>
+
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<script src="https://uicdn.toast.com/editor-plugin-chart/latest/toastui-editor-plugin-chart.min.js"></script>
+<script src="https://uicdn.toast.com/editor-plugin-uml/latest/toastui-editor-plugin-uml.min.js"></script>
+<script src="https://uicdn.toast.com/editor-plugin-color-syntax/latest/toastui-editor-plugin-color-syntax.min.js"></script>
+<script src="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight-all.min.js"></script>
+<script src="https://uicdn.toast.com/editor-plugin-table-merged-cell/latest/toastui-editor-plugin-table-merged-cell.min.js"></script>
+
+    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+<script>
+
+    (function(){
+        const { Editor } = toastui;
+        const { uml ,chart, colorSyntax,tableMergedCell,codeSyntaxHighlight} = Editor.plugin;
+        document.addEventListener('DOMContentLoaded',function() {
+            console.log("page loaded");
+
+            const editor = new Editor({
+                el: document.querySelector('#editor'),
+                height: window.innerHeight/2,
+                initialEditType: 'wysiwyg',
+                previewStyle: 'tab',
+                usageStatistics: false,
+                plugins:[uml,chart,colorSyntax,tableMergedCell,codeSyntaxHighlight]
+            });
+
+
+            editor.setMarkdown('``` chart\n' +
+                ',category1,category2\n' +
+                'Jan,21,23\n' +
+                'Feb,31,17\n' +
+                '\n' +
+                'type: column\n' +
+                'title: Monthly Revenue\n' +
+                'x.title: Amount\n' +
+                'y.title: Month\n' +
+                'y.min: 1\n' +
+                'y.max: 40\n' +
+                'y.suffix: $\n' +
+                '```\n' +
+                '\n' +
+                '``` js\n' +
+                'console.log(\'foo\')\n' +
+                '```\n' +
+                '\n' +
+                '``` javascript\n' +
+                'console.log(\'bar\')\n' +
+                '```\n' +
+                '\n' +
+                '``` html\n' +
+                '<div id="editor"><span>baz</span></div>\n' +
+                '```\n' +
+                '\n' +
+                '``` wrong\n' +
+                '[1 2 3]\n' +
+                '```\n' +
+                '\n' +
+                '``` clojure\n' +
+                '[1 2 3]\n' +
+                '```\n' +
+                '\n' +
+                '| @cols=2:merged |\n' +
+                '| ------ | --- |\n' +
+                '| table | table2 |\n' +
+                '\n' +
+                '``` uml\n' +
+                'partition Conductor {\n' +
+                '  (*) --> "Climbs on Platform"\n' +
+                '  --> === S1 ===\n' +
+                '  --> Bows\n' +
+                '}\n' +
+                '\n' +
+                'partition Audience #LightSkyBlue {\n' +
+                '  === S1 === --> Applauds\n' +
+                '}\n' +
+                '\n' +
+                'partition Conductor {\n' +
+                '  Bows --> === S2 ===\n' +
+                '  --> WavesArmes\n' +
+                '  Applauds --> === S2 ===\n' +
+                '}\n' +
+                '\n' +
+                'partition Orchestra #CCCCEE {\n' +
+                '  WavesArmes --> Introduction\n' +
+                '  --> "Play music"\n' +
+                '}\n' +
+                '```',true);
+
+            var content = editor.getMarkdown();
+            const viewer = Editor.factory({
+                el: document.querySelector('#viewer'),
+                viewer: true,
+                height: window.innerHeight/2,
+                initialValue: content
+            })
+
+
+
+            editor.on('change',function(){
+                setTimeout(function(){
+                    console.log(editor.getHtml());
+                },300);
+                viewer.setMarkdown(editor.getMarkdown());
+
+            });
+
+        });
+    })();
+
+</script>
+</body>
+</html>

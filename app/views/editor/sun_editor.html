@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!--<link rel="stylesheet" href="/css/styles.css"/>-->
+    <link href="https://cdn.jsdelivr.net/npm/suneditor@latest/dist/css/suneditor.min.css" rel="stylesheet">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/suneditor@latest/assets/css/suneditor.css" rel="stylesheet"> -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/suneditor@latest/assets/css/suneditor-contents.css" rel="stylesheet"> -->
+    <script src="https://cdn.jsdelivr.net/npm/suneditor@latest/dist/suneditor.min.js"></script>
+
+</head>
+<body>
+<textarea id="sample">Hi</textarea>
+<!--<div id="editor">-->
+<!--</div>-->
+<!--<script src="//uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>-->
+<script>
+
+    (function(){
+        document.addEventListener('DOMContentLoaded',function() {
+
+            SUNEDITOR.create('sample', {
+
+
+
+                // Add tags to the default tags whitelist of editor.
+                // _defaultTagsWhitelist : 'br|p|div|pre|blockquote|h[1-6]|ol|ul|li|hr|figure|figcaption|img|iframe|audio|video|table|thead|tbody|tr|th|td|a|b|strong|var|i|em|u|ins|s|span|strike|del|sub|sup'
+                addTagsWhitelist: '',
+
+                // Whitelist of tags when pasting.
+                // _editorTagsWhitelist  : _defaultTagsWhitelist + addTagsWhitelist
+                // ex) 'p|h[1-6]'
+                pasteTagsWhitelist: '',
+
+
+                // Add attributes whitelist of tags that should be kept undeleted from the editor.
+                // -- Fixed whitelist --
+                // Native attributes: 'contenteditable|colspan|rowspan|target|href|src|class|type'
+                // Editor attributes: 'data-format|data-size|data-file-size|data-file-name|data-origin|data-align|data-image-link|data-rotate|data-proportion|data-percentage|origin-size'
+                // ex) {
+                //  'all': 'style', // Apply to all tags
+                //  'input': 'checked' // Apply to input tag
+                // }
+                attributesWhitelist: '',
+
+
+
+                // change default formatBlock array.
+                formats: ['p', 'div', 'blockquote', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+
+                // show the number of characters in the editor.
+                charCounter: false,
+
+                // null || 'char' || 'byte' || 'byte-html'
+                charCounterType: 'char',
+
+                // text to be displayed in the "charCounter" area of the bottom bar
+                charCounterLabel: null,
+
+                // the maximum number of characters allowed to be inserted into the editor.
+                maxCharCount: null,
+
+                // the min-width size of the editor.
+                minWidth: null,
+
+                // the max-width size of the editor.
+                maxWidth: null,
+
+                // the size of the total uploadable images (in bytes).
+                imageUploadSizeLimit: null,
+
+                // 'classic', 'inline', 'balloon', 'balloon-always'
+                mode: 'classic',
+
+                // toolbar width
+                toolbarWidth: 'max-content',
+
+                // Sets to -1 or false or null to turn off
+                // Sticky Toolbar
+                // Default: 0px (offset)
+                stickyToolbar: 0,
+
+                // the position property of suneditor.
+                position: null,
+
+                // places content in the iframe
+                iframe : false,
+
+                // allows the usage of HTML, HEAD, BODY tags and DOCTYPE declaration.
+                fullPage: false,
+
+                // CSS file to apply inside the iframe
+                iframeCSSFileName: 'suneditor',
+
+                // CodeMirror option object
+                codeMirror: null,
+
+                // Katex library option object
+                codeMirror: null,
+
+                // Shows the bottom resizing bar.
+                resizingBar: true,
+
+                // Font Family array
+                font: ['Arial', 'Comic Sans MS', 'Courier New', 'Impact', 'Georgia','tahoma', 'Trebuchet MS', 'Verdana'],
+
+                // Font Size array
+                fontSize: [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72],
+
+                // Font size unit
+                fontSizeUnit: 'px',
+
+                // Enables video resizing
+                videoResizing: true,
+
+                // width/height of the video
+                videoWidth: 560,
+                videoHeight: '56.25%',
+
+                //  If true, video size can only be scaled by percentage.
+                videoSizeOnlyPercentage: false,
+
+                // Choose whether to video rotation buttons display.
+                videoRotation: false,
+
+                // The default aspect ratio of the video.
+                videoRatio: 0.5625,
+
+                // Video ratio selection options.
+                videoRatioList:  [ {name: 'Classic Film 3:2', value: 0.6666}, {name: 'HD', value: 0.5625} ],
+
+                // Choose whether the video height input is visible.
+                videoHeightShow: true,
+
+                // Choose whether the video ratio options is visible.
+                videoRatioShow: true,
+
+                // the query string of a YouTube embedded URL.
+                youtubeQuery: '',
+
+                // the placeholder text.
+                placeholder: null,
+
+                // custom icons
+                // {
+                //   bold: '<span class="se-icon-text">B</span>',
+                //   table: '<i class=""xx"></i>',
+                //   insert_row_above: ''
+                // }
+                icons: null,
+
+                // Choose whether the image height input is visible.
+                imageHeightShow: true,
+
+                // enables image resizing
+                imageResizing: true,
+
+                // image width/height
+                imageWidth: 'auto',
+                imageHeight: 'auto',
+
+                // If true, image size can only be scaled by percentage
+                imageSizeOnlyPercentage: true,
+
+                // Choose whether the image height input is visible.
+                imageHeightShow: true,
+
+                // Shows image rotation buttons
+                imageRotation: false,
+
+                // image file input
+                imageFileInput: true,
+
+                // image url input
+                imageUrlInput: true,
+
+                // image upload url
+                imageUploadUrl: null,
+
+                // Http Header when uploading images
+                imageUploadHeader: null,
+
+                // height/width of the editor
+                height: '',
+                width: '',
+
+                // min height/width of the editor
+                minHeight: null,
+                minWidth: null,
+
+                // color array of color picker
+                // e.g. [['#ccc', '#dedede', 'OrangeRed', 'Orange', 'RoyalBlue', 'SaddleBrown'], ['SlateGray', 'BurlyWood', 'DeepPink', 'FireBrick', 'Gold', 'SeaGreen']]
+                colorList: null,
+
+                // line-height array
+                lineHeights: [
+                    {text: '1', value: 1},
+                    {text: '1.15', value: 1.15},
+                    {text: '1.5', value: 1.5},
+                    {text: '2', value: 2}
+                ],
+
+                // Displays the current node structure to resizingBar
+                showPathLabel: true,
+
+                // Size of background area when activating dialog window
+                popupDisplay: '',
+
+                // CSS display property
+                display: 'block',
+
+                // show/hide toolbar icons
+                buttonList: [
+                    'undo', 'redo',
+                    'font', 'fontSize', 'formatBlock',
+                    'bold', 'underline', 'italic', 'strike', 'subscript', 'superscript',
+                    'removeFormat', 'paragraphStyle',
+                    'fontColor', 'hiliteColor', 'textStyle',
+                    'outdent', 'indent',
+                    'align', 'horizontalRule', 'list', 'lineHeight',
+                    'table', 'link', 'image', 'video',
+                    'fullScreen', 'showBlocks', 'codeView',
+                    'preview', 'print', 'save', 'template'
+                ],
+
+                // execute a function when the save button is clicked.
+                callBackSave: function(){}
+
+            })
+
+        });
+    })();
+
+</script>
+</body>
+</html>

@@ -4,44 +4,44 @@ process.on('uncaughtException', function (err) {
 });
 var express = require('express');
 var expressLayouts = require('express-ejs-layouts');
-
+var cors = require('cors');
 var path = require('path');
+var fileUpload = require('express-fileupload');
 const app = express();
-var bodyParser = require('body-parser');
-
 var port = process.env.PORT || 3000;
-var User = require('./models/userModel');
 
-var MongoClient = require('mongodb').MongoClient;
-var uri = process.env.MONGO_ATLAS_URI || 'mongodb://localhost:27017';
-if(uri){
-    MongoClient.connect(uri, { useNewUrlParser: true ,useUnifiedTopology: true },function(err,db) {
-        if (err) throw err;
-        db.db().collection('tes').find().toArray(function (err,value) {
-            console.log(value);
-            db.close();
-        });});
-//     var client = new MongoClient(uri, { useNewUrlParser: true ,useUnifiedTopology: true });
-//     client.connect();
-// // perform actions on the collection object
-//     });
-}
+var MongoClient = require('./utils/mongoclient');
+var routes = require('./routes/routes');
 
 
-//Template support added
-app.set('views',path.join(__dirname,'/views'));
-app.set('view engine','ejs');
-app.use(expressLayouts);
-//Serves static files like css & imgs from below static mapping
-app.use(express.static(__dirname+'/public'));
-app.use(express.json());
-app.use(express.urlencoded({
-    extended: true
-}));
-// Configures handlers here
-require('./routes/routes')(app);
-app.listen(port,function(){
-    console.log("Server started at port "+port);
+
+MongoClient().then(db => {
+    //Template support added
+    app.set('views',path.join(__dirname,'/views'));
+    app.set('view engine','ejs');
+    app.use(cors({exposedHeaders:['Authorization']}));
+    app.use(expressLayouts);
+    //Serves static files like css & imgs from below static mapping
+    app.use(express.static(__dirname+'/public'));
+    app.use(express.json());
+    app.use(express.urlencoded({
+        extended: true
+    }));
+    app.use(fileUpload({
+        useTempFiles : true,
+        tempFileDir : '/tmp/'
+    }));
+    const jsonErrorHandler =  async (err, req, res, next) => {
+        if (!module.parent) console.error(err.stack);
+        res.status(500);
+        res.json({result: {error:true,message:err.message}});
+        next();
+    };
+    app.use(jsonErrorHandler);
+    //Configures handlers here
+    routes(app,db).listen(port,function(){
+        console.log("Server started at port "+port);
+    });
 });
 
 

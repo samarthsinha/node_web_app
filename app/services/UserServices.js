@@ -1,4 +1,5 @@
 'use strict';
+const EncUtils = require('../utils/encryptionUtils');
 const User = require('../models/userModel');
 
 var UserService = {};
@@ -19,6 +20,70 @@ UserService.getUserList = function (page,size) {
     return usersList;
 };
 
+class UserValidataionError extends Error{
+    constructor(message) {
+        return super(message);
+    }
+}
+
+
+/**
+ * Register user
+ * @param db
+ * @param userJson
+ * @returns {Promise<boolean>}
+ */
+UserService.registerUser = async (db,userJson) => {
+    if(userJson){
+        if(!userJson.firstName){
+            throw new UserValidataionError('First Name is required.');
+        }
+        if(!userJson.lastName){
+            throw new UserValidataionError('Last Name is required.');
+        }
+        if(!userJson.email) {
+            throw new UserValidataionError('Email is required.');
+        }
+        if(!userJson.password){
+            throw new UserValidataionError('Password is required.');
+        }
+        var usr = new User();
+        usr.email = userJson.email;
+        usr.firstName = userJson.firstName;
+        usr.lastName = userJson.lastName;
+        usr.mobileNumber = userJson.mobileNumber;
+        usr.role = 'USER';
+        usr.password = EncUtils.cryptPassword(userJson.password);
+        await db.collection('site_users').insertOne(usr);
+        return true;
+    }
+    throw new UserValidataionError('User details required');
+};
+
+/**
+ *  Login with credentials
+ * @param db
+ * @param userDetails
+ * @returns {Promise<*>}
+ */
+UserService.login = async (db,userDetails) =>{
+    if(userDetails){
+        let userName = userDetails.username;
+        let pwd = userDetails.password;
+        let users = await db.collection('site_users').find({email: userName}).limit(1).toArray();
+        if(users && users.length>0){
+            if(!EncUtils.comparePassword(pwd,users[0].password)){
+                throw new UserValidataionError('Username/Password incorrect');
+            }
+            users[0].password = 'xxxxx';
+            return users[0];
+        }else{
+            throw new UserValidataionError('User not registered');
+        }
+    }
+    return null;
+};
+
 /**
  * Logic to fetch user by User ID;
  * @param id
@@ -29,3 +94,5 @@ UserService.getUser = function (id) {
 };
 
 module.exports = UserService;
+
+exports.UserValidataionError = UserValidataionError;
