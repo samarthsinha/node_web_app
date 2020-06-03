@@ -7,13 +7,18 @@ function Logger(level){
 Logger.INFO = 2;
 Logger.DEBUG = 1;
 Logger.ERROR = 3;
+var levelString = {
+    "1": 'DEBUG',
+    "2": 'INFO',
+    "3": 'ERROR'
+};
 function log(level,currentLevel,message,error){
     if(currentLevel>=level) {
         if(error) {
-            console.error(new Date, message, error);
+            console.error(`${new Date}, ${levelString[""+currentLevel]}, ${JSON.stringify(message)}, ${error}`);
             return;
         }
-        console.log(new Date,message);
+        console.log(`${new Date},${levelString[""+currentLevel]}, ${JSON.stringify(message)}`);
     }
 }
 
@@ -28,4 +33,6 @@ Logger.prototype.error = function(message,e){
 Logger.prototype.info = function(message){
     log(this.level,Logger.INFO,message,null);
 };
-module.exports = Logger;
+
+const logger = new Logger(Logger.DEBUG);
+module.exports = logger;

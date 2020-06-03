@@ -3,12 +3,10 @@
  */
 'use strict';
 
-const fs = require('fs');
 const userService = require('../services/UserServices');
-const Logger = require('../utils/logger');
+const logger = require('../utils/logger');
 const path = require('path');
 
-var logger = new Logger(Logger.ERROR);
 function homePageHandler(req,res) {
     res.render('index', {files: userService.getUserList()}, (err,page) => {
         if(err){
@@ -22,6 +20,10 @@ function homePageHandler(req,res) {
 
 function aboutPageHandler(req,res){
         res.render('about');
+}
+
+function registerPageHandler(req,res){
+        res.render('register');
 }
 
 function toasteditorPageHandler(req,res){
@@ -53,6 +55,7 @@ module.exports = function (app,db) {
     //Home page goes here
     app.get('/',homePageHandler);
     app.get('/about',aboutPageHandler);
+    app.get('/register',registerPageHandler);
     app.get('/toast-editor',toasteditorPageHandler);
     app.get('/sun-editor',sunEditorPageHandler);
     app.get('/jodit-editor',joditEditorPageHandler);

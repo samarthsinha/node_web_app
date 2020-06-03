@@ -9,6 +9,7 @@ var path = require('path');
 var fileUpload = require('express-fileupload');
 const app = express();
 var port = process.env.PORT || 3000;
+const passport = require('passport');
 
 var MongoClient = require('./utils/mongoclient');
 var routes = require('./routes/routes');
@@ -17,6 +18,8 @@ var routes = require('./routes/routes');
 
 MongoClient().then(db => {
     //Template support added
+    app.use(passport.initialize());
+    require('./config/passport-config')(passport,db);
     app.set('views',path.join(__dirname,'/views'));
     app.set('view engine','ejs');
     app.use(cors({exposedHeaders:['Authorization']}));

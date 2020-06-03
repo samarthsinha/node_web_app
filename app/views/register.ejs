@@ -1,0 +1,109 @@
+<%- contentFor('hero') %>
+<main xmlns="http://www.w3.org/1999/html">
+    <aside class="container">
+        <form method="POST" id="signup" style="display: inline;">
+            <input id="su_firstName" name="firstName" placeholder="First Name" type="text"/><br/>
+            <input id="su_lastName" name="lastName" placeholder="Last Name" type="text"/><br/>
+            <input id="su_email" name="email" placeholder="Email" type="text"/><br/>
+            <input id="su_mobileNumber" name="mobileNumber" placeholder="Mobile Number" type="text"/><br/>
+            <input id="su_password" name="password" placeholder="Password" type="password"/><br/>
+            <input id="su_password1" name="password1" placeholder="Re-Enter Password" type="password"/><br/>
+            <input type="submit"/>
+        </form>
+    </aside>
+</main>
+<script>
+    (function(){
+        const formToJSON = elements => [].reduce.call(elements, (data, element) => {
+            if(element.name){
+                data[element.name] = element.value;
+            }
+            return data;
+        }, {});
+
+
+        document.addEventListener('DOMContentLoaded',function(){
+            document.querySelector('#signup').addEventListener('submit',function(e){
+                e.preventDefault();
+                const data = formToJSON(this.elements);
+                if(data['password']!== data['password1']){
+                    console.error("Password not matched");
+                    alert("Password not matched");
+                    return;
+                }
+                delete data['password1'];
+                makeAjaxRequest('/v1/user/register','POST',{'Content-type':'application/json','X-Requested-With':'XMLHttpRequest'},JSON.stringify(data),handler);
+            });
+
+        });
+    })();
+
+
+
+    function handler(httpRequest) {
+        // response has been received so handle it now
+        if (httpRequest.readyState === 4) {
+            //In case status is 200 is what you are looking for implementation
+            // of this will change accordingly
+            if (httpRequest.status >= 200 && httpRequest.status < 400) {
+                var resp = httpRequest.responseText;
+                alert("Success "+ resp);
+                console.log(httpRequest.responseText);
+            }
+        }
+    }
+
+
+
+    //    makeAjaxRequest("/api/v1/get-user-info", "POST", null, handler);
+
+    /**
+     *
+     * @param url
+     * @param method
+     * @param data
+     * @param callback (Callback function to handle response state)
+     * @returns {boolean}
+     */
+    function makeAjaxRequest(url, method, headers, data, callback) {
+        var httpRequest;
+        if (window.XMLHttpRequest) { // Mozilla, Safari, ...
+            httpRequest = new XMLHttpRequest();
+        } else if (window.ActiveXObject) { // IE
+            try {
+                httpRequest = new ActiveXObject("Msxml2.XMLHTTP");
+            }
+            catch (e) {
+                try {
+                    httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                catch (e) {
+                }
+            }
+        }
+
+        if (!httpRequest) {
+            console.log('Giving up :( Cannot create an XMLHTTP instance');
+            return false;
+        }
+        httpRequest.onreadystatechange = (function () {
+            return callback(httpRequest);
+        });
+        if (method && method.toUpperCase() == 'POST') {
+            httpRequest.open(method, url, true);
+            for(var o in headers){
+                httpRequest.setRequestHeader(o,headers[o]);
+            }
+            // httpRequest.setRequestHeader("Content-type", "application/json");
+            // httpRequest.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+            httpRequest.send(data);
+        } else {
+            httpRequest.open(method, url);
+            for(var o in headers){
+                httpRequest.setRequestHeader(o,headers[o]);
+            }
+            httpRequest.send();
+        }
+    }
+
+</script>

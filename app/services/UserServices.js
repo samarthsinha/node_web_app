@@ -1,6 +1,7 @@
 'use strict';
 const EncUtils = require('../utils/encryptionUtils');
 const User = require('../models/userModel');
+const ObjectId = require('mongodb').ObjectId
 
 var UserService = {};
 
@@ -75,7 +76,7 @@ UserService.login = async (db,userDetails) =>{
             if(!EncUtils.comparePassword(pwd,users[0].password)){
                 throw new UserValidataionError('Username/Password incorrect');
             }
-            users[0].password = 'xxxxx';
+            delete users[0].password;
             return users[0];
         }else{
             throw new UserValidataionError('User not registered');
@@ -89,8 +90,18 @@ UserService.login = async (db,userDetails) =>{
  * @param id
  * @returns {{}}
  */
-UserService.getUser = function (id) {
-  return {};
+UserService.getUserById = async function (id,db) {
+    if(id){
+        console.log(id);
+        let users = await db.collection('site_users').find({_id: new ObjectId(id)}).toArray();
+        if(users && users.length>0){
+            delete users[0].password;
+            return users[0];
+        }else{
+            throw new UserValidataionError('User not found');
+        }
+    }
+    return null;
 };
 
 module.exports = UserService;
